@@ -318,19 +318,32 @@ nvm install 22</code></pre>
     <p>Das war's. Ein Paket, global installiert. Fertig.</p>
 </div>
 
-<h2 id="apikey">Schritt 3: Anthropic API-Key holen</h2>
+<h2 id="apikey">Schritt 3: Anthropic-Zugang einrichten</h2>
 <div class="step">
     <div class="step-number">3</div>
+    <p>Du hast zwei Optionen:</p>
+
+    <h3>Option A: API-Key (Pay-per-Use)</h3>
     <ol>
         <li>Geh zu <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
-        <li>Account erstellen (falls noch nicht vorhanden)</li>
+        <li>Account erstellen</li>
         <li><strong>API Keys</strong> → "Create Key"</li>
         <li>Key kopieren (fängt mit <code>sk-ant-...</code> an)</li>
     </ol>
+    <p>Du zahlst nur was du verbrauchst. <strong>Claude Sonnet 4</strong> ist ein guter Start (~$3/MTok Input, ~$15/MTok Output). Für den Anfang reichen $10–20/Monat locker.</p>
+
+    <h3>Option B: Max-Plan (Flatrate)</h3>
+    <ol>
+        <li>Geh zu <a href="https://claude.ai" target="_blank">claude.ai</a></li>
+        <li><strong>Max-Plan</strong> abschließen ($100 oder $200/Monat)</li>
+        <li>Du bekommst API-Zugang inklusive — kein separater Console-Account nötig</li>
+    </ol>
+    <p>Lohnt sich wenn du den Agenten intensiv nutzt. Keine Überraschungen bei der Rechnung, unbegrenzter Zugang zu Sonnet und großzügiges Opus-Kontingent.</p>
 
     <div class="callout callout-info">
-        <div class="callout-title">💰 Kosten</div>
-        <strong>Claude Sonnet 4</strong> ist ein guter Start (~$3/MTok Input, ~$15/MTok Output). Für den Anfang reichen $10–20/Monat locker. <strong>Opus 4.6</strong> ist stärker, aber teurer — lohnt sich, wenn man den Agenten viel arbeiten lässt.
+        <div class="callout-title">💰 Was ist günstiger?</div>
+        <strong>Wenig Nutzung</strong> (ein paar Nachrichten am Tag): API-Key (Option A) ist billiger.<br>
+        <strong>Viel Nutzung</strong> (Agent läuft den ganzen Tag, erstellt Dokumente, recherchiert): Max-Plan (Option B) lohnt sich schnell. Heiko nutzt Opus 4.6 über den Max-Plan.
     </div>
 </div>
 
