@@ -527,6 +527,28 @@ npm update -g openclaw</code></pre>
     OpenClaw hat ein Skill-System — fertige Pakete für GitHub, Wetter, Coding Agents und mehr. Stöber mal auf <a href="https://clawhub.com" target="_blank">clawhub.com</a>.
 </div>
 
+<div class="callout callout-info">
+    <div class="callout-title">🎤 Sprachnachrichten</div>
+    OpenClaw erkennt Telegram-Sprachnachrichten automatisch und transkribiert sie. Du kannst einfach eine Sprachnachricht an den Bot schicken — er versteht dich. Dafür muss <strong>Whisper</strong> (OpenAIs Spracherkennungsmodell) lokal installiert sein:
+<pre><code><span class="comment"># Python venv für Whisper erstellen</span>
+python3 -m venv ~/.whisper-env
+~/.whisper-env/bin/pip install openai-whisper
+
+<span class="comment"># Testen</span>
+~/.whisper-env/bin/whisper --help</code></pre>
+    <p>In der OpenClaw-Config den Pfad angeben:</p>
+<pre><code>{
+  <span class="key">"tools"</span>: {
+    <span class="key">"whisper"</span>: {
+      <span class="key">"bin"</span>: <span class="string">"~/.whisper-env/bin/whisper"</span>,
+      <span class="key">"model"</span>: <span class="string">"base"</span>,
+      <span class="key">"language"</span>: <span class="string">"de"</span>
+    }
+  }
+}</code></pre>
+    <p>Modell <code>base</code> reicht für kurze Nachrichten. Für bessere Erkennung: <code>small</code> oder <code>medium</code> (braucht mehr RAM/VRAM).</p>
+</div>
+
 <div class="callout callout-success">
     <div class="callout-title">📱 Multi-Channel</div>
     Telegram ist nur der Anfang. OpenClaw unterstützt auch WhatsApp, Discord, Signal, iMessage, Slack, MS Teams — alles gleichzeitig über einen Gateway. Einfach weitere Channels in der Config aktivieren.
