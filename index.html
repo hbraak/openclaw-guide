@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦞 OpenClaw Setup-Guide</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #e85d3a;
+            --accent-light: #ff7b54;
+            --code-bg: #1c2128;
+            --success: #3fb950;
+            --warning: #d29922;
+            --info: #58a6ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.2rem;
+        }
+
+        .badge-linux { background: #1a3a2a; color: var(--success); }
+        .badge-telegram { background: #1a2a3a; color: var(--info); }
+        .badge-tailscale { background: #2a2a1a; color: var(--warning); }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--accent-light);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--text);
+        }
+
+        p { margin-bottom: 1rem; }
+
+        a {
+            color: var(--info);
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.9em;
+            background: var(--code-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1rem 0 1.5rem;
+            position: relative;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .comment { color: var(--text-muted); }
+        .string { color: #a5d6ff; }
+        .key { color: var(--accent-light); }
+
+        .step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .callout {
+            border-left: 4px solid;
+            padding: 1rem 1.2rem;
+            margin: 1.2rem 0;
+            border-radius: 0 8px 8px 0;
+            background: var(--surface);
+        }
+
+        .callout-info { border-color: var(--info); }
+        .callout-warning { border-color: var(--warning); }
+        .callout-success { border-color: var(--success); }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .architecture {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 { margin-top: 0; color: var(--text-muted); }
+
+        .toc ol {
+            padding-left: 1.5rem;
+        }
+
+        .toc li {
+            margin: 0.4rem 0;
+        }
+
+        .toc a {
+            color: var(--text);
+        }
+
+        ul, ol {
+            margin: 0.8rem 0 1.2rem 1.5rem;
+        }
+
+        li { margin: 0.4rem 0; }
+
+        .links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .link-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .link-card:hover {
+            border-color: var(--accent);
+            text-decoration: none;
+        }
+
+        .link-card .emoji { font-size: 1.5rem; display: block; margin-bottom: 0.3rem; }
+        .link-card .label { color: var(--text); font-weight: 600; }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.8rem; }
+            .step { padding: 1.2rem; }
+            .links { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<header>
+    <h1>🦞 OpenClaw Setup-Guide</h1>
+    <p>Dein eigener KI-Assistent — lokal, privat, erreichbar über Telegram</p>
+    <div style="margin-top: 1rem">
+        <span class="badge badge-linux">Linux</span>
+        <span class="badge badge-telegram">Telegram</span>
+        <span class="badge badge-tailscale">Tailscale</span>
+    </div>
+</header>
+
+<nav class="toc">
+    <h3>📋 Inhalt</h3>
+    <ol>
+        <li><a href="#ziel">Was du am Ende hast</a></li>
+        <li><a href="#voraussetzungen">Voraussetzungen</a></li>
+        <li><a href="#node">Node.js installieren</a></li>
+        <li><a href="#openclaw">OpenClaw installieren</a></li>
+        <li><a href="#apikey">Anthropic API-Key holen</a></li>
+        <li><a href="#telegram">Telegram-Bot erstellen</a></li>
+        <li><a href="#config">OpenClaw einrichten</a></li>
+        <li><a href="#start">Gateway starten</a></li>
+        <li><a href="#workspace">Workspace & Persönlichkeit</a></li>
+        <li><a href="#tailscale">Tailscale (Remote-Dashboard)</a></li>
+        <li><a href="#commands">Nützliche Befehle</a></li>
+        <li><a href="#tipps">Tipps vom Betrieb</a></li>
+        <li><a href="#architektur">Architektur</a></li>
+    </ol>
+</nav>
+
+<h2 id="ziel">🎯 Was du am Ende hast</h2>
+<ul>
+    <li>Einen KI-Agenten (<strong>Claude</strong> von Anthropic), der auf <strong>deinem</strong> Linux-Rechner läuft</li>
+    <li>Erreichbar über einen eigenen <strong>Telegram-Bot</strong> — vom Handy, Tablet, überall</li>
+    <li>Shell-Zugriff, Web-Suche, Dateiverwaltung, Memory, Cron-Jobs</li>
+    <li>Optional: Web-Dashboard über Tailscale von jedem Gerät</li>
+    <li>Deine Daten bleiben auf deiner Kiste. Keine Cloud, kein Vendor-Lock-in.</li>
+</ul>
+
+<h2 id="voraussetzungen">📦 Voraussetzungen</h2>
+<ul>
+    <li>Linux-Rechner (Desktop, Laptop, Server, Raspberry Pi — egal, Hauptsache läuft)</li>
+    <li><strong>Node.js 22+</strong> (<code>node -v</code> zum Prüfen)</li>
+    <li><strong>Anthropic API-Key</strong> (kostet je nach Modell ~$5–30/Monat bei normalem Gebrauch)</li>
+    <li>Telegram-Account</li>
+    <li>~10 Minuten deiner Zeit</li>
+</ul>
+
+<h2 id="node">Schritt 1: Node.js installieren</h2>
+<div class="step">
+    <div class="step-number">1</div>
+    <p>Falls <code>node -v</code> schon v22+ zeigt, überspring diesen Schritt.</p>
+<pre><code><span class="comment"># Ubuntu/Debian</span>
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+<span class="comment"># Oder via nvm (flexibler, kein sudo nötig)</span>
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+nvm install 22</code></pre>
+    <p>Check: <code>node -v</code> → sollte <code>v22.x.x</code> zeigen.</p>
+</div>
+
+<h2 id="openclaw">Schritt 2: OpenClaw installieren</h2>
+<div class="step">
+    <div class="step-number">2</div>
+<pre><code>npm install -g openclaw</code></pre>
+    <p>Das war's. Ein Paket, global installiert. Fertig.</p>
+</div>
+
+<h2 id="apikey">Schritt 3: Anthropic API-Key holen</h2>
+<div class="step">
+    <div class="step-number">3</div>
+    <ol>
+        <li>Geh zu <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+        <li>Account erstellen (falls noch nicht vorhanden)</li>
+        <li><strong>API Keys</strong> → "Create Key"</li>
+        <li>Key kopieren (fängt mit <code>sk-ant-...</code> an)</li>
+    </ol>
+
+    <div class="callout callout-info">
+        <div class="callout-title">💰 Kosten</div>
+        <strong>Claude Sonnet 4</strong> ist ein guter Start (~$3/MTok Input, ~$15/MTok Output). Für den Anfang reichen $10–20/Monat locker. <strong>Opus 4.6</strong> ist stärker, aber teurer — lohnt sich, wenn man den Agenten viel arbeiten lässt.
+    </div>
+</div>
+
+<h2 id="telegram">Schritt 4: Telegram-Bot erstellen</h2>
+<div class="step">
+    <div class="step-number">4</div>
+    <ol>
+        <li>Telegram öffnen, <strong>@BotFather</strong> anschreiben (verifiziertes Häkchen prüfen!)</li>
+        <li><code>/newbot</code> senden</li>
+        <li>Namen vergeben (z.B. "Jochens Assistent")</li>
+        <li>Username vergeben (muss auf <code>bot</code> enden, z.B. <code>jochen_assistant_bot</code>)</li>
+        <li><strong>Bot-Token kopieren</strong> (sieht aus wie <code>123456789:ABCdefGHIjklMNOpqrsTUVwxyz</code>)</li>
+    </ol>
+
+    <div class="callout callout-warning">
+        <div class="callout-title">⚙️ Optionale BotFather-Settings</div>
+        <ul>
+            <li><code>/setprivacy</code> → Disable (wenn der Bot in Gruppen alles mitlesen soll)</li>
+            <li><code>/setjoingroups</code> → Enable (wenn du ihn in Gruppen nutzen willst)</li>
+        </ul>
+    </div>
+</div>
+
+<h2 id="config">Schritt 5: OpenClaw einrichten</h2>
+<div class="step">
+    <div class="step-number">5</div>
+    <p>Der Setup-Wizard führt dich durch alles:</p>
+<pre><code>openclaw setup</code></pre>
+    <p>Er fragt nach API-Provider (Anthropic), Key, Modell und Telegram-Token.</p>
+    <p>Falls du die Config manuell anpassen willst:</p>
+<pre><code>nano ~/.openclaw/openclaw.json</code></pre>
+    <p>Minimal-Config für Telegram:</p>
+<pre><code>{
+  <span class="key">"channels"</span>: {
+    <span class="key">"telegram"</span>: {
+      <span class="key">"enabled"</span>: true,
+      <span class="key">"botToken"</span>: <span class="string">"DEIN_BOT_TOKEN_HIER"</span>,
+      <span class="key">"dmPolicy"</span>: <span class="string">"pairing"</span>
+    }
+  }
+}</code></pre>
+</div>
+
+<h2 id="start">Schritt 6: Gateway starten</h2>
+<div class="step">
+    <div class="step-number">6</div>
+<pre><code>openclaw gateway start</code></pre>
+    <p>Beim ersten Start:</p>
+    <ul>
+        <li>Der Gateway läuft als <strong>systemd-Service</strong> (startet automatisch bei Reboot)</li>
+        <li>Schreib deinem Bot auf Telegram eine Nachricht</li>
+        <li>Du bekommst einen <strong>Pairing-Code</strong> — bestätige ihn im Terminal oder Web-UI</li>
+        <li>Danach bist du "gepairt" und der Bot antwortet <strong>nur dir</strong></li>
+    </ul>
+
+    <p>Check ob alles läuft:</p>
+<pre><code>openclaw status
+openclaw doctor</code></pre>
+
+    <div class="callout callout-success">
+        <div class="callout-title">✅ Geschafft!</div>
+        Ab jetzt kannst du deinem Bot auf Telegram schreiben und bekommst Antworten von Claude. Der Agent hat Zugriff auf dein Dateisystem, kann Shell-Befehle ausführen, im Web suchen und sich Sachen merken.
+    </div>
+</div>
+
+<h2 id="workspace">Schritt 7: Workspace & Persönlichkeit</h2>
+<div class="step">
+    <div class="step-number">7</div>
+<pre><code>mkdir -p ~/clawd
+cd ~/clawd</code></pre>
+
+    <p>Erstell die Basis-Dateien, die dein Agent bei jeder Session liest:</p>
+
+    <h3>SOUL.md — Wer ist dein Agent?</h3>
+<pre><code><span class="comment"># Persönlichkeit, Ton, Verhalten</span>
+Du bist [Name], Jochens persönlicher Assistent.
+Direkt, kompetent, kein Gelaber.
+Hab Meinungen. Sei ehrlich.</code></pre>
+
+    <h3>USER.md — Wer bist du?</h3>
+<pre><code><span class="comment"># Kontext über dich — der Agent liest das</span>
+- Name: Jochen
+- Timezone: Europe/Berlin
+- Interessen: [was auch immer]</code></pre>
+
+    <h3>AGENTS.md — Arbeitsanweisungen</h3>
+<pre><code><span class="comment"># Was der Agent bei jeder Session tun soll</span>
+1. Lies SOUL.md und USER.md
+2. Lies memory/YYYY-MM-DD.md für aktuellen Kontext
+3. Führe Buch in memory/ über alles Wichtige</code></pre>
+
+    <p>In der Config den Workspace setzen:</p>
+<pre><code>{
+  <span class="key">"agents"</span>: {
+    <span class="key">"defaults"</span>: {
+      <span class="key">"workspace"</span>: <span class="string">"/home/jochen/clawd"</span>
+    }
+  }
+}</code></pre>
+
+    <div class="callout callout-info">
+        <div class="callout-title">🧠 Warum Workspace-Dateien?</div>
+        Der Agent wacht jede Session ohne Erinnerung auf. Diese Dateien <em>sind</em> sein Gedächtnis. Je besser du sie pflegst (oder ihn pflegen lässt), desto nützlicher wird er über die Zeit. Heikos Agent führt tägliche Logs, kennt seinen Stundenplan, weiß wann die Kinder Sport haben und welchen Stoff seine Klassen gerade durchnehmen — alles über diese Dateien.
+    </div>
+</div>
+
+<h2 id="tailscale">Schritt 8: Tailscale (Remote-Dashboard)</h2>
+<div class="step">
+    <div class="step-number">8</div>
+    <p>Optional, aber nice: Zugriff auf das OpenClaw Web-Dashboard von überall über dein privates Tailscale-Netzwerk.</p>
+
+<pre><code><span class="comment"># Tailscale installieren</span>
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up</code></pre>
+
+    <p>Config erweitern:</p>
+<pre><code>{
+  <span class="key">"gateway"</span>: {
+    <span class="key">"bind"</span>: <span class="string">"loopback"</span>,
+    <span class="key">"tailscale"</span>: {
+      <span class="key">"mode"</span>: <span class="string">"serve"</span>
+    },
+    <span class="key">"auth"</span>: {
+      <span class="key">"mode"</span>: <span class="string">"token"</span>,
+      <span class="key">"allowTailscale"</span>: true
+    }
+  }
+}</code></pre>
+
+    <p>Dann erreichst du das Dashboard über <code>https://dein-rechner.tailnet-name.ts.net/</code> von jedem Gerät in deinem Tailnet. Kein Port-Forwarding, kein VPN-Gefummel — Tailscale regelt.</p>
+
+    <div class="callout callout-warning">
+        <div class="callout-title">🔒 Sicherheit</div>
+        <code>serve</code> = nur innerhalb deines Tailnets erreichbar. Wenn du es öffentlich machen willst (<code>funnel</code>), erzwingt OpenClaw ein Passwort. Mach das nur wenn du weißt was du tust.
+    </div>
+</div>
+
+<h2 id="commands">⌨️ Nützliche Befehle</h2>
+
+<h3>Terminal</h3>
+<pre><code><span class="comment"># Status & Diagnose</span>
+openclaw status
+openclaw doctor
+openclaw doctor --fix
+
+<span class="comment"># Gateway steuern</span>
+openclaw gateway start
+openclaw gateway stop
+openclaw gateway restart
+
+<span class="comment"># Logs live mitgucken</span>
+journalctl -u openclaw-gateway -f
+
+<span class="comment"># Update</span>
+npm update -g openclaw</code></pre>
+
+<h3>Telegram (im Chat mit dem Bot)</h3>
+<pre><code>/status    <span class="comment">— Was läuft gerade?</span>
+/reset     <span class="comment">— Session zurücksetzen</span>
+/model     <span class="comment">— Modell wechseln (z.B. /model sonnet für günstigere Anfragen)</span></code></pre>
+
+<h2 id="tipps">💡 Tipps vom Betrieb</h2>
+
+<div class="callout callout-info">
+    <div class="callout-title">🔍 Brave Search API (kostenlose Web-Suche)</div>
+    <a href="https://brave.com/search/api/" target="_blank">brave.com/search/api</a> → Free Tier (2.000 Anfragen/Monat). Key in Config unter <code>tools.web.search.apiKey</code>. Damit kann dein Agent das Web durchsuchen.
+</div>
+
+<div class="callout callout-info">
+    <div class="callout-title">🧠 Memory-System</div>
+    Dein Agent vergisst alles zwischen Sessions. Bring ihm bei, in <code>memory/</code>-Dateien mitzuschreiben. Dann wacht er auf, liest seine eigenen Notizen und weiß wieder Bescheid. Über Zeit baut er sich ein echtes Gedächtnis auf.
+</div>
+
+<div class="callout callout-info">
+    <div class="callout-title">🔄 Auto-Start</div>
+    <code>openclaw gateway start</code> richtet einen systemd-Service ein. Überlebt Reboots. Dein Bot ist immer da.
+</div>
+
+<div class="callout callout-info">
+    <div class="callout-title">🧩 Skills & Plugins</div>
+    OpenClaw hat ein Skill-System — fertige Pakete für GitHub, Wetter, Coding Agents und mehr. Stöber mal auf <a href="https://clawhub.com" target="_blank">clawhub.com</a>.
+</div>
+
+<div class="callout callout-success">
+    <div class="callout-title">📱 Multi-Channel</div>
+    Telegram ist nur der Anfang. OpenClaw unterstützt auch WhatsApp, Discord, Signal, iMessage, Slack, MS Teams — alles gleichzeitig über einen Gateway. Einfach weitere Channels in der Config aktivieren.
+</div>
+
+<h2 id="architektur">🏗 Architektur (für den Nerd)</h2>
+
+<div class="architecture">┌──────────────┐     ┌─────────────────┐     ┌──────────────┐
+│   Telegram   │────▶│    OpenClaw      │────▶│  Claude API  │
+│   (Bot API)  │◀────│    Gateway       │◀────│  (Anthropic) │
+└──────────────┘     │    :18789        │     └──────────────┘
+                     │                  │
+┌──────────────┐     │  ┌────────────┐  │     ┌──────────────┐
+│  Tailscale   │────▶│  │ Sessions   │  │────▶│   Lokales    │
+│  Dashboard   │◀────│  │ Memory     │  │◀────│ Dateisystem  │
+└──────────────┘     │  │ Cron/Tools │  │     └──────────────┘
+                     │  └────────────┘  │
+                     └─────────────────┘</div>
+
+<p style="margin-top: 1rem">Alles läuft <strong>lokal auf deinem Rechner</strong>. Die einzigen externen Verbindungen:</p>
+<ul>
+    <li><strong>Anthropic API</strong> — für das Sprachmodell (Claude)</li>
+    <li><strong>Telegram Bot API</strong> — für die Nachrichten</li>
+</ul>
+<p>Deine Daten, deine Dateien, deine Kontrolle. Kein SaaS, kein Abo, keine Cloud.</p>
+
+<h2>🔗 Links</h2>
+<div class="links">
+    <a href="https://docs.openclaw.ai" target="_blank" class="link-card">
+        <span class="emoji">📖</span>
+        <span class="label">Dokumentation</span>
+    </a>
+    <a href="https://github.com/openclaw/openclaw" target="_blank" class="link-card">
+        <span class="emoji">💻</span>
+        <span class="label">Source Code</span>
+    </a>
+    <a href="https://discord.com/invite/clawd" target="_blank" class="link-card">
+        <span class="emoji">💬</span>
+        <span class="label">Discord Community</span>
+    </a>
+    <a href="https://clawhub.com" target="_blank" class="link-card">
+        <span class="emoji">🧩</span>
+        <span class="label">Skills & Plugins</span>
+    </a>
+</div>
+
+<footer>
+    <p>Erstellt von <strong>Niemand</strong> 👻 — Heikos digitaler Assistent</p>
+    <p style="margin-top: 0.3rem">Februar 2026</p>
+</footer>
+
+</div>
+</body>
+</html>
